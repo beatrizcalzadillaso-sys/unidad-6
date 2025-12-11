@@ -11,7 +11,7 @@ order by nomemp desc;
 puesto sea vendedor.*/
 select nomemp, fecingreso, salario
 from empleado
-where numdep =3 and puesto = 'vendedor';
+where numdep =3 and puesto like 'vendedor';
 
 /*c) Muestra el número y nombre de todos los departamentos.*/
 select numdep, nomdep
@@ -26,7 +26,7 @@ where nomemp like 'A%';
 /*e) Muestra todos los datos de los empleados que tengan como primero o segundo apellido Ruiz.*/
 select *
 from empleado
-where nomemp like '%Ruiz%';
+where nomemp like '%Ruiz%'; /*RUIZ PUEDE ESTAR EN CUALQUIER PARTE DE LA CADENA DE CARACTERES*/
 
 /*f) Muestra los nombres y puestos de los empleados cuyo puesto sea gerente, director o empleado,
 ordenando el resultado por puesto y por nombre.*/
@@ -61,7 +61,22 @@ con respecto al salario (alias Porcentaje comisión). Redondea este último dato
 para lo que puedes hacer uso de la función round, que recibe como primer parámetro el número
 que se desea redondear y como segundo el número de decimales que se desean en el resultado.*/
 select nomemp, nomdep, comision, salario, round(comision/salario, 2) 'Porcentaje comision'
-from empleado natural join departamento;
+from empleado natural join departamento
+where comision>0;
+
+select nomemp, nomdep, comision, salario, round(comision/salario, 2) 'Porcentaje comision'
+from empleado e inner join departamento d on e.numdep = d.numdep
+where comision>0;
+
+select nomemp, nomdep, comision, salario, round(comision/salario, 2) 'Porcentaje comision'
+from empleado e, departamento d 
+where comision>0 and e.numdep = d.numdep;
+
+select nomemp, nomdep, comision, salario, round(comision/salario, 2) 'Porcentaje comision'
+from empleado join departamento using(numdep) 
+where comision>0;
+
+
 
 /*k) Indica para el empleado que no tiene jefe o director su nombre, puesto, nombre del
 departamento y la localidad donde trabaja.*/
@@ -69,12 +84,13 @@ select nomemp, puesto, nomdep, localidad
 from empleado natural join departamento
 where numempjefe is null;
 
+
 /*l) Muestra a continuación para los departamentos con número superior o igual a 3, su nombre y
 localidad y, en caso de que trabaje en él algún empleado, su nombre, salario y comisión.
 Aunque no trabaja ningún empleado en dicho departamento, se deben mostrar sus datos.*/
 insert into Departamento VALUES (4, 'Calidad', 'Santander');
 select nomdep, salario, comision
-from departamento d left outer join empleado e on d.numdep=e.numdep; /*LEFT*/
+from departamento d left outer join empleado e on d.numdep=e.numdep; /*LEFT de empleado*/
 
 select nomdep, salario,comision
 from empleado e right outer join departamento d on e.numdep=d.numdep; /*RIGHT*/
